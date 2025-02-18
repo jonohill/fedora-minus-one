@@ -56,10 +56,10 @@ jobs:
 
     steps:
         # These deps are missing from arm runners
-      - name: Add deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y buildah podman
+      # - name: Add deps
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y buildah podman
 
       - name: Checkout
         uses: actions/checkout@v4

@@ -35,7 +35,14 @@ echo -n '['
 for version in "${VERSIONS[@]}"; do
     for arch in "${ARCHS[@]}"; do
         err "Checking $version/$arch"
-        if skopeo inspect "docker://$IMAGE_BASE:$version" --override-os "linux" --override-arch "$arch" >/dev/null 2>&1; then
+
+        if ! data="$(skopeo inspect "docker://$IMAGE_BASE:$version" --override-os "linux" --override-arch "$arch" 2>/dev/null)"; then
+            continue
+        fi
+
+        available_arch="$(jq -r '.Architecture' <<<"$data")"
+
+        if [ "$available_arch" = "$arch" ]; then
 
             tags="$version-$arch $version.$today-$arch"
             if [ "$version" = "$latest" ]; then
