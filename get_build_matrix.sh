@@ -37,15 +37,15 @@ for version in "${VERSIONS[@]}"; do
         err "Checking $version/$arch"
         if skopeo inspect "docker://$IMAGE_BASE:$version" --override-os "linux" --override-arch "$arch" >/dev/null 2>&1; then
 
-            labels="$version-$arch $version.$today-$arch"
+            tags="$version-$arch $version.$today-$arch"
             if [ "$version" = "$latest" ]; then
-                labels="$labels latest-$arch latest.$today-$arch"
+                tags="$tags latest-$arch latest.$today-$arch"
             fi
             if [ "$version" = "$stable" ]; then
-                labels="$labels stable-$arch stable.$today-$arch"
+                tags="$tags stable-$arch stable.$today-$arch"
             fi
             if [ "$version" = "$testing" ]; then
-                labels="$labels testing-$arch testing.$today-$arch"
+                tags="$tags testing-$arch testing.$today-$arch"
             fi
 
             runner=ubuntu-24.04
@@ -60,11 +60,11 @@ for version in "${VERSIONS[@]}"; do
             fi
             
             jq -cn \
-                --arg labels "$labels" \
+                --arg tags "$tags" \
                 --arg runner "$runner" \
                 --arg image_base "$IMAGE_BASE" \
                 --arg image_tag "$version" \
-                '{labels: $labels, runner: $runner, image_base: $image_base, image_tag: $image_tag}'
+                '{tags: $tags, runner: $runner, image_base: $image_base, image_tag: $image_tag}'
 
         fi
     done
