@@ -54,7 +54,8 @@ jobs:
     needs: get_versions
 
     strategy:
-      matrix: ${{ fromJson(needs.get_versions.outputs.versions) }}
+      matrix: 
+        include: ${{ fromJson(needs.get_versions.outputs.versions) }}
 
     steps:
         # These deps are missing from arm runners
