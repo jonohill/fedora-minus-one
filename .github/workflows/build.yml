@@ -27,6 +27,9 @@ jobs:
     name: Get Fedora versions
     runs-on: ubuntu-24.04
 
+    outputs:
+      versions: ${{ steps.get_versions.outputs.versions }}
+
     steps:
 
       - name: Checkout
@@ -35,7 +38,7 @@ jobs:
       - name: Get Fedora versions
         id: get_versions
         run: |
-          echo "config<<EndOfConfig" >>$GITHUB_OUTPUT
+          echo "versions<<EndOfConfig" >>$GITHUB_OUTPUT
           ./get_build_matrix.sh >>$GITHUB_OUTPUT
           echo "EndOfConfig" >>$GITHUB_OUTPUT
 
@@ -51,7 +54,7 @@ jobs:
     needs: get_versions
 
     strategy:
-      matrix: ${{ fromJson(needs.get_versions.outputs.config) }}
+      matrix: ${{ fromJson(needs.get_versions.outputs.versions) }}
 
     steps:
         # These deps are missing from arm runners
