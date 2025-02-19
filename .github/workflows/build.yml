@@ -176,10 +176,6 @@ jobs:
       - get_versions
       - build_images
 
-    strategy:
-      matrix: 
-        include: ${{ fromJson(needs.get_versions.outputs.manifests) }}
-
     steps:
 
       - name: Set up Docker Buildx
@@ -192,6 +188,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create manifest
+      - name: Create manifests
         run: |
-          docker buildx imagetools create -t ${{ matrix.tag }} ${{ matrix.images }}
+          items=$(echo ${{ needs.get_versions.outputs.manifests }} | jq -c '.[]')
+          for item in $items; do
+            tag=$(echo $item | jq -c '.tag')
+            images=$(echo $item | jq -c '.images')
+            docker buildx imagetools create -t $tag $images
+          done
