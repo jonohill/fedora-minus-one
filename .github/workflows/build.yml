@@ -190,9 +190,9 @@ jobs:
 
       - name: Create manifests
         env:
-          IMAGES: ${{ needs.get_versions.outputs.images }}
+          MANIFESTS: ${{ needs.get_versions.outputs.manifests }}
         run: |
-          items=$(echo "$IMAGES" | jq -c '.[]')
+          items=$(echo "$MANIFESTS" | jq -c '.[]')
           for item in $items; do
             tag=$(echo "$item" | jq -r '.tag')
             images=$(echo "$item" | jq -r '.images')
