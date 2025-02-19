@@ -93,7 +93,7 @@ for version in versions:
             runner += "-arm"
             
         image = {
-            "tags": ",".join(map(lambda t: f"{output_image}:{t}", tags)),
+            "tags": ",".join(map(lambda t: f"{output_image}:{t}-{arch}", tags)),
             "runner": runner,
             "image_base": f"{IMAGE_REGISTRY}/{IMAGE_REPO}",
             "image_tag": version
