@@ -189,10 +189,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create manifests
+        env:
+          IMAGES: ${{ needs.get_versions.outputs.images }}
         run: |
-          items=$(echo ${{ needs.get_versions.outputs.manifests }} | jq -c '.[]')
+          items=$(echo "$IMAGES" | jq -c '.[]')
           for item in $items; do
-            tag=$(echo $item | jq -c '.tag')
-            images=$(echo $item | jq -c '.images')
+            tag=$(echo "$item" | jq -c '.tag')
+            images=$(echo "$item" | jq -c '.images')
             docker buildx imagetools create -t $tag $images
           done
