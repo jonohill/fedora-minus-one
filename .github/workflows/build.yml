@@ -36,7 +36,7 @@ jobs:
       - name: Get Fedora versions
         id: get_versions
         run: |
-          output="$(./get_build_matrix.py | jq -c)"
+          output="$(./get_build_matrix.py ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }} | jq -c)"
           images=$(echo "$output" | jq -c '.images')
           manifests=$(echo "$output" | jq -c '.manifests')
           echo "images=$images" >> $GITHUB_OUTPUT
