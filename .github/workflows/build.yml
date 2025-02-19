@@ -194,7 +194,8 @@ jobs:
         run: |
           items=$(echo "$IMAGES" | jq -c '.[]')
           for item in $items; do
-            tag=$(echo "$item" | jq -c '.tag')
-            images=$(echo "$item" | jq -c '.images')
+            tag=$(echo "$item" | jq -r '.tag')
+            images=$(echo "$item" | jq -r '.images')
+            echo docker buildx imagetools create -t $tag $images
             docker buildx imagetools create -t $tag $images
           done
