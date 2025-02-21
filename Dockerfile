@@ -8,6 +8,7 @@ FROM ${IMAGE_BASE}:${IMAGE_TAG}
 
 RUN dnf install -y \
     adw-gtk3-theme \
-    distrobox
+    distrobox \
+    gnome-tweaks
 
 RUN ostree container commit
