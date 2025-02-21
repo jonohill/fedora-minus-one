@@ -6,4 +6,7 @@ ARG IMAGE_TAG=42@sha256:ec58fe5b4a59af1c324f938af0737345ce942d8c6035b8a892b9c87d
 
 FROM ${IMAGE_BASE}:${IMAGE_TAG}
 
+RUN dnf install -y \
+    adw-gtk3-theme
+
 RUN ostree container commit
