@@ -62,6 +62,14 @@ output = {
 }
 
 for version in versions:
+
+    try:
+        if int(version) <= 40:
+            # dnf not available in container for <= 40
+            continue
+    except ValueError:
+        pass
+
     for arch in archs:
         err(f"Checking {version}/{arch}")
 
