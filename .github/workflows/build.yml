@@ -62,7 +62,7 @@ jobs:
       - name: Add deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y buildah podman
+          sudo apt-get install -y podman qemu-utils
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -108,7 +108,9 @@ jobs:
             -v /dev:/dev \
             --security-opt label=type:unconfined_t \
             "$img" \
-            bootc install to-disk /dev/nbd0
+            bootc install to-disk \
+              --filesystem btrfs \
+              /dev/nbd0
           sudo qemu-nbd --disconnect /dev/nbd0
 
 
