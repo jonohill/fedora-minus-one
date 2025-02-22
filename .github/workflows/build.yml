@@ -96,6 +96,7 @@ jobs:
       - name: Build vm image
         if: ${{ github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
         run: |
+          set -ex
           img="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.version_tag }}"
           vmdk="${{ env.IMAGE_NAME }}-${{ matrix.version_tag }}.vmdk"
           qemu-img create -f vmdk "$vmdk" 50G
@@ -103,7 +104,7 @@ jobs:
           sudo qemu-nbd --connect=/dev/nbd0 "$vmdk"
           sudo podman run \
             --privileged \
-            --pid=host 
+            --pid=host \
             -v /var/lib/containers:/var/lib/containers \
             -v /dev:/dev \
             --security-opt label=type:unconfined_t \
