@@ -97,6 +97,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
         run: |
           img="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.version_tag }}"
+          mkdir -p output
           sudo podman pull "$img"
           sudo podman run \
             --rm \
