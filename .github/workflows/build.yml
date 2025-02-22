@@ -98,6 +98,7 @@ jobs:
         run: |
           img="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.version_tag }}"
           mkdir -p output
+          sudo rm -rf /var/lib/containers/storage
           sudo podman pull "$img"
           sudo podman run \
             --rm \
