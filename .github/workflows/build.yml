@@ -59,10 +59,10 @@ jobs:
 
     steps:
         # These deps are missing from arm runners
-      # - name: Add deps
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y buildah podman
+      - name: Add deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y buildah podman
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -110,6 +110,7 @@ jobs:
             --type anaconda-iso \
             --use-librepo=True \
             "$img"
+          find ./output
 
       # Rechunk is a script that we use on Universal Blue to make sure there isnt a single huge layer when your image gets published.
       # This does not make your image faster to download, just provides better resumability and fixes a few errors.
