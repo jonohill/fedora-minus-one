@@ -201,3 +201,41 @@ jobs:
             echo docker buildx imagetools create -t "$tag" $images
             docker buildx imagetools create -t "$tag" $images
           done
+
+  build_isos:
+    name: Build combined isos
+    runs-on: ubuntu-24.04
+
+    # if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
+    needs:
+      - get_versions
+      - build_images
+
+    strategy:
+      matrix: 
+        include: ${{ fromJson(needs.get_versions.outputs.images) }}
+
+    steps:
+
+      - name: Build ISO
+        run: |
+          img="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.version_tag }}"
+          sudo podman pull "$img"
+          sudo podman run \
+            --rm \
+            -it \
+            --privileged \
+            --pull=newer \
+            --security-opt label=type:unconfined_t \
+            -v ./output:/output \
+            -v /var/lib/containers/storage:/var/lib/containers/storage \
+            quay.io/centos-bootc/bootc-image-builder:latest \
+            --type anaconda-iso \
+            --use-librepo=True \
+            "$img"
